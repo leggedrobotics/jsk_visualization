@@ -1,2 +1,2 @@
 library 'continuous_integration_pipeline'
-ciPipeline("--ignore jsk_interactive_markers jsk_rqt_plugins jsk_visualization")
+ciPipeline("--packages jsk_rviz_plugins_msgs jsk_rviz_plugins")
