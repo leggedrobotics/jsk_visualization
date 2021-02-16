@@ -35,7 +35,7 @@
 #ifndef JSK_RVIZ_PLUGIN_OVERLAY_TEXT_DISPLAY_H_
 #define JSK_RVIZ_PLUGIN_OVERLAY_TEXT_DISPLAY_H_
 
-#include "jsk_rviz_plugins/OverlayText.h"
+#include "jsk_rviz_plugins_msgs/OverlayText.h"
 #ifndef Q_MOC_RUN
 #include <rviz/display.h>
 #include "overlay_utils.h"
@@ -70,7 +70,7 @@ namespace jsk_rviz_plugins
 
     int texture_width_;
     int texture_height_;
-    
+
     bool overtake_fg_color_properties_;
     bool overtake_bg_color_properties_;
     bool overtake_position_properties_;
@@ -85,9 +85,9 @@ namespace jsk_rviz_plugins
     std::string font_;
     int left_;
     int top_;
-    
+
     ros::Subscriber sub_;
-    
+
     virtual void onInitialize();
     virtual void subscribe();
     virtual void unsubscribe();
@@ -132,7 +132,7 @@ namespace jsk_rviz_plugins
     void updateFont();
     void updateLineWidth();
   private:
-    void processMessage(const jsk_rviz_plugins::OverlayText::ConstPtr& msg);
+    void processMessage(const jsk_rviz_plugins_msgs::OverlayText::ConstPtr& msg);
   };
 }
 

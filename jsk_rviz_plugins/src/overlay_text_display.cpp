@@ -60,7 +60,7 @@ namespace jsk_rviz_plugins
   {
     update_topic_property_ = new rviz::RosTopicProperty(
       "Topic", "",
-      ros::message_traits::datatype<jsk_rviz_plugins::OverlayText>(),
+      ros::message_traits::datatype<jsk_rviz_plugins_msgs::OverlayText>(),
       "jsk_rviz_plugins::OverlayText topic to subscribe to.",
       this, SLOT( updateTopic() ));
     overtake_position_properties_property_ = new rviz::BoolProperty(
@@ -142,7 +142,7 @@ namespace jsk_rviz_plugins
       font_property_->addOption(font_families_[i], (int)i);
     }
   }
-  
+
   OverlayTextDisplay::~OverlayTextDisplay()
   {
     onDisable();
@@ -181,7 +181,7 @@ namespace jsk_rviz_plugins
     }
     unsubscribe();
   }
-  
+
   void OverlayTextDisplay::unsubscribe()
   {
     sub_.shutdown();
@@ -194,13 +194,13 @@ namespace jsk_rviz_plugins
       sub_ = ros::NodeHandle().subscribe(topic_name, 1, &OverlayTextDisplay::processMessage, this);
     }
   }
-  
+
   void OverlayTextDisplay::updateTopic()
   {
     unsubscribe();
     subscribe();
   }
-    
+
   // only the first time
   void OverlayTextDisplay::onInitialize()
   {
@@ -224,7 +224,7 @@ namespace jsk_rviz_plugins
     updateLineWidth();
     require_update_texture_ = true;
   }
-  
+
   void OverlayTextDisplay::update(float wall_dt, float ros_dt)
   {
     if (!require_update_texture_) {
@@ -262,20 +262,20 @@ namespace jsk_rviz_plugins
 	else
 	  shadow_color = Qt::black; //fg_color_.darker();
 	shadow_color.setAlpha(fg_color_.alpha());
-	
+
 	std::string color_wrapped_text
           = (boost::format("<span style=\"color: rgba(%2%, %3%, %4%, %5%)\">%1%</span>")
              % text_ % fg_color_.red() % fg_color_.green() % fg_color_.blue() %
              fg_color_.alpha()).str();
 
-        // find a remove "color: XXX;" regex match to generate a proper shadow 
+        // find a remove "color: XXX;" regex match to generate a proper shadow
         std::regex color_tag_re("color:.+?;");
         std::string null_char("");
         std::string formatted_text_ = std::regex_replace(text_, color_tag_re, null_char);
         std::string color_wrapped_shadow
           = (boost::format("<span style=\"color: rgba(%2%, %3%, %4%, %5%)\">%1%</span>")
              % formatted_text_ % shadow_color.red() % shadow_color.green() % shadow_color.blue() % shadow_color.alpha()).str();
-	
+
         QStaticText static_text(
           boost::algorithm::replace_all_copy(color_wrapped_text, "\n", "<br >").c_str());
         static_text.setTextWidth(w);
@@ -303,9 +303,9 @@ namespace jsk_rviz_plugins
     overlay_->setDimensions(overlay_->getTextureWidth(), overlay_->getTextureHeight());
     require_update_texture_ = false;
   }
-  
+
   void OverlayTextDisplay::processMessage
-  (const jsk_rviz_plugins::OverlayText::ConstPtr& msg)
+  (const jsk_rviz_plugins_msgs::OverlayText::ConstPtr& msg)
   {
     if (!isEnabled()) {
       return;
@@ -318,14 +318,14 @@ namespace jsk_rviz_plugins
       overlay_->show();
     }
     if (overlay_) {
-      if (msg->action == jsk_rviz_plugins::OverlayText::DELETE) {
+      if (msg->action ==jsk_rviz_plugins_msgs::OverlayText::DELETE) {
         overlay_->hide();
       }
-      else if (msg->action == jsk_rviz_plugins::OverlayText::ADD) {
+      else if (msg->action ==jsk_rviz_plugins_msgs::OverlayText::ADD) {
         overlay_->show();
       }
     }
-    
+
     // store message for update method
     text_ = msg->text;
     if (!overtake_position_properties_) {
@@ -335,7 +335,7 @@ namespace jsk_rviz_plugins
       left_ = msg->left;
       top_ = msg->top;
     }
-    if (!overtake_bg_color_properties_) 
+    if (!overtake_bg_color_properties_)
       bg_color_ = QColor(msg->bg_color.r * 255.0,
                          msg->bg_color.g * 255.0,
                          msg->bg_color.b * 255.0,
@@ -356,7 +356,7 @@ namespace jsk_rviz_plugins
 
   void OverlayTextDisplay::updateOvertakePositionProperties()
   {
-    
+
     if (!overtake_position_properties_ &&
         overtake_position_properties_property_->getBool()) {
       updateTop();
@@ -383,7 +383,7 @@ namespace jsk_rviz_plugins
       text_size_property_->hide();
     }
   }
-  
+
   void OverlayTextDisplay::updateOvertakeFGColorProperties()
   {
     if (!overtake_fg_color_properties_ &&
@@ -429,7 +429,7 @@ namespace jsk_rviz_plugins
       bg_alpha_property_->hide();
     }
   }
-  
+
   void OverlayTextDisplay::updateAlignBottom()
   {
     if (align_bottom_ != align_bottom_property_->getBool()) {
@@ -446,7 +446,7 @@ namespace jsk_rviz_plugins
     invert_shadow_ = invert_shadow_property_->getBool();
   }
 
-  
+
   void OverlayTextDisplay::updateTop()
   {
     top_ = top_property_->getInt();
@@ -454,7 +454,7 @@ namespace jsk_rviz_plugins
       require_update_texture_ = true;
     }
   }
-  
+
   void OverlayTextDisplay::updateLeft()
   {
     left_ = left_property_->getInt();
@@ -462,7 +462,7 @@ namespace jsk_rviz_plugins
       require_update_texture_ = true;
     }
   }
-  
+
   void OverlayTextDisplay::updateWidth()
   {
     texture_width_ = width_property_->getInt();
@@ -470,7 +470,7 @@ namespace jsk_rviz_plugins
       require_update_texture_ = true;
     }
   }
-  
+
   void OverlayTextDisplay::updateHeight()
   {
     texture_height_ = height_property_->getInt();
@@ -564,7 +564,7 @@ namespace jsk_rviz_plugins
     top_property_->setValue(y);
     left_property_->setValue(x);
   }
-  
+
 }
 
 #include <pluginlib/class_list_macros.h>

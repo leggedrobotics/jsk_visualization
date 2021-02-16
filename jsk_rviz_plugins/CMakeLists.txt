@@ -2,7 +2,7 @@
 # https://github.com/ros-visualization/rviz/pull/634
 
 # http://ros.org/doc/groovy/api/catkin/html/user_guide/supposed.html
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.2)
 project(jsk_rviz_plugins)
 if("$ENV{ROS_DISTRO}" STRGREATER "melodic")
   add_compile_options(-std=c++14)
@@ -20,7 +20,8 @@ find_package(catkin REQUIRED COMPONENTS rviz jsk_hark_msgs jsk_footstep_msgs jsk
   geometry_msgs
   dynamic_reconfigure
   jsk_recognition_msgs
-  jsk_gui_msgs)
+  jsk_gui_msgs
+  jsk_rviz_plugins_msgs)
 
 # Use ccache if installed to make it fast to generate object files
 if (CMAKE_VERSION VERSION_LESS 3.4)
@@ -31,23 +32,15 @@ if (CMAKE_VERSION VERSION_LESS 3.4)
   endif(CCACHE_FOUND)
 endif()
 
-add_message_files(FILES
-  OverlayText.msg OverlayMenu.msg TransformableMarkerOperate.msg ObjectFitCommand.msg
-  Pictogram.msg PictogramArray.msg RecordCommand.msg StringStamped.msg)
-add_service_files(FILES
-  RequestMarkerOperate.srv EusCommand.srv
-  Screenshot.srv
-  )
 catkin_python_setup()
 generate_dynamic_reconfigure_options(
   cfg/ClassificationResultVisualizer.cfg
   cfg/ContactStateMarker.cfg
   cfg/OverlayTextInterface.cfg)
-generate_messages(DEPENDENCIES std_msgs geometry_msgs)
 
 catkin_package(
     DEPENDS rviz
-    CATKIN_DEPENDS jsk_hark_msgs jsk_footstep_msgs
+    CATKIN_DEPENDS jsk_hark_msgs jsk_footstep_msgs jsk_rviz_plugins_msgs
     jsk_recognition_utils cv_bridge people_msgs image_geometry
     INCLUDE_DIRS # TODO include
     LIBRARIES ${PROJECT_NAME}
@@ -109,8 +102,7 @@ add_dependencies(jsk_rviz_plugins
   jsk_hark_msgs_generate_messages_cpp
   jsk_recognition_msgs_generate_messages_cpp
   people_msgs_generate_messages_cpp
-  view_controller_msgs_generate_messages_cpp
-  ${PROJECT_NAME}_generate_messages_cpp)
+  view_controller_msgs_generate_messages_cpp)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set_target_properties(jsk_rviz_plugins PROPERTIES LINK_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -z defs")
