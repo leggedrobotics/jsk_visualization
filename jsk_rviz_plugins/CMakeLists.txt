@@ -70,6 +70,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(HEADER_FILES
   src/overlay_text_display.h
+  src/tf_trajectory_display.h
 )
 
 if(rviz_QT_VERSION VERSION_LESS "5")
@@ -81,6 +82,7 @@ endif()
 set(SOURCE_FILES
   src/overlay_text_display.cpp
   src/overlay_utils.cpp
+  src/tf_trajectory_display.cpp
   ${MOC_FILES}
 )
 if(jsk_recognition_msgs_VERSION VERSION_LESS 1.2.15)
